@@ -14,9 +14,9 @@ public class PlayerExceptionHandling {
     @ExceptionHandler
     public ResponseEntity<Exception> findByIdExceptionHandle(Exception exception) {
         if (exception instanceof NoSuchElementException) {
-            return new ResponseEntity(exception.getMessage(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity(exception.getMessage(), HttpStatus.NOT_FOUND); // 404
         } else {
-            return new ResponseEntity(exception.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(exception.getMessage(), HttpStatus.BAD_REQUEST); // 400
         }
     }
 }

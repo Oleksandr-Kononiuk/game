@@ -21,14 +21,13 @@ public class Player {
 
     @Column(name = "race")
     @Enumerated(EnumType.STRING)
-    //@Type(type = "")
     private Race race;
 
     @Column(name = "profession")
     @Enumerated(EnumType.STRING)
     private Profession profession;
 
-    @Column(name = "experience", length = 10_000_000)
+    @Column(name = "experience")
     private Integer experience;
 
     @Column(name = "level")
@@ -38,6 +37,8 @@ public class Player {
     private Integer untilNextLevel;
 
     @Column(name = "birthday")
+    @Basic
+    @Temporal(TemporalType.DATE)
     private Date birthday;
 
     @Column(name = "banned")
