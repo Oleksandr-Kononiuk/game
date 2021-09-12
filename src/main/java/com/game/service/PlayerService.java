@@ -16,6 +16,8 @@ import java.util.NoSuchElementException;
 public class PlayerService {
 
     private final PlayerRepository playerRepository;
+    private static final long YEAR_2000 = 946684800000L;
+    private static final long YEAR_3000 = 32503680000000L;
 
     @Autowired
     public PlayerService(PlayerRepository playerRepository) {
@@ -67,8 +69,8 @@ public class PlayerService {
                 && player.getTitle() != null
                 && player.getTitle().length() <= 30
                 && player.getBirthday() != null
-                && player.getBirthday().getTime() > 946684800000L
-                && player.getBirthday().getTime() < 32503680000000L
+                && player.getBirthday().getTime() > YEAR_2000
+                && player.getBirthday().getTime() < YEAR_3000
                 && player.getRace() != null
                 && player.getProfession() != null
                 && player.getExperience() != null
@@ -100,8 +102,7 @@ public class PlayerService {
             playerToUpdate.setBanned(updatedPlayer.getBanned());
         }
         if (updatedPlayer.getBirthday() != null) {
-            if (updatedPlayer.getBirthday().getTime() >= 946684800000L
-                    && updatedPlayer.getBirthday().getTime() <= 32503680000000L) {
+            if (updatedPlayer.getBirthday().getTime() >= YEAR_2000 && updatedPlayer.getBirthday().getTime() <= YEAR_3000) {
                 playerToUpdate.setBirthday(updatedPlayer.getBirthday());
             } else {
                 throw new IllegalArgumentException("Updated player birthday out of bounds");
