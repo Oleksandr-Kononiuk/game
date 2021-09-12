@@ -48,23 +48,32 @@ public class PlayerService {
     }
 
     public Player createPlayer(Player player) {
-        if (player.getName() == null || player.getName().isEmpty() || player.getName().length() > 12)
-            throw new IllegalArgumentException("Player name null or length greater then 12 or empty.");
-        if (player.getTitle() == null || player.getTitle().length() > 30)
-            throw new IllegalArgumentException("Player title null or length greater then 30.");
-        if (player.getBirthday() == null || player.getBirthday().getTime() <= 946684800000L || player.getBirthday().getTime() >= 32503680000000L)
-            throw new IllegalArgumentException("Player birthday out of bounds or null.");
-        if (player.getRace() == null || player.getProfession() == null)
-            throw new IllegalArgumentException("Player race or profession not setup.");
-        if (player.getBanned() == null)
-            player.setBanned(false);
-        if (player.getExperience() == null || player.getExperience() < 0 || player.getExperience() > 10_000_000) {
-            throw new IllegalArgumentException("Player experience out of bounds or null.");
-        } else {
+        if (validatePlayer(player)) {
+            if (player.getBanned() == null) {
+                player.setBanned(false);
+            }
             player.setLevel(player.calculateCurrentLevel());
             player.setUntilNextLevel(player.expToNextLevel());
+        } else {
+            throw new IllegalArgumentException("Incorrect given Player instance.");
         }
         return playerRepository.save(player);
+    }
+
+    private boolean validatePlayer(Player player) {
+        return player.getName() != null
+                && !player.getName().isEmpty()
+                && player.getName().length() <= 12
+                && player.getTitle() != null
+                && player.getTitle().length() <= 30
+                && player.getBirthday() != null
+                && player.getBirthday().getTime() > 946684800000L
+                && player.getBirthday().getTime() < 32503680000000L
+                && player.getRace() != null
+                && player.getProfession() != null
+                && player.getExperience() != null
+                && player.getExperience() >= 0
+                && player.getExperience() <= 10_000_000;
     }
 
     public Player updatePlayer(Long id, Player updatedPlayer) {
