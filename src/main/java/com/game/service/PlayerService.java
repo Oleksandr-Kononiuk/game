@@ -2,21 +2,14 @@ package com.game.service;
 
 import com.game.controller.PlayerOrder;
 import com.game.entity.Player;
-import com.game.repository.CustomPlayerRepositoryImpl;
 import com.game.repository.PlayerFilterCriteria;
 import com.game.repository.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -32,10 +25,6 @@ public class PlayerService {
     @Transactional(readOnly = true)
     public List<Player> getAllPlayers(PlayerFilterCriteria playerFilterCriteria,
                                           PlayerOrder order, Integer pageNumber, Integer pageSize) {
-
-//        List<Player> players = customPlayerRepository.getAllWithFilter(playerFilterCriteria);
-//        Sort sort = Sort.by(Sort.Direction.ASC, order.getFieldName());
-//        Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
 
         return playerRepository.getAllWithFilters(playerFilterCriteria, order, pageNumber, pageSize);
     }
@@ -54,8 +43,8 @@ public class PlayerService {
     }
 
     @Transactional(readOnly = true)
-    public int countPlayerWithFilters(String title) {
-        return playerRepository.countPlayersWithFilters(title);
+    public int countPlayerWithFilters(PlayerFilterCriteria playerFilterCriteria) {
+        return playerRepository.countPlayersWithFilters(playerFilterCriteria);
     }
 
     public Player createPlayer(Player player) {

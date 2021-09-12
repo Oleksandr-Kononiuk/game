@@ -6,15 +6,10 @@ import com.game.entity.Race;
 import com.game.repository.PlayerFilterCriteria;
 import com.game.service.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/rest")
@@ -41,12 +36,11 @@ public class PlayerController {
         playerService.deletePlayer(id);
     }
 
-    //~2.5+4,5+3
+    //~2.5+4,5+3+2h
     @GetMapping("/players")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public List<Player> getAllPlayers(
-            //, defaultValue = ""
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String title,
             @RequestParam(required = false) Race race,
@@ -68,10 +62,11 @@ public class PlayerController {
         return playerService.getAllPlayers(playerFilterCriteria, order, pageNumber, pageSize);
     }
 
+    //~1h
     @GetMapping("/players/count")
-    //@ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public ResponseEntity<Integer> countPlayers(
+    public Integer countPlayers(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String title,
             @RequestParam(required = false) Race race,
@@ -87,7 +82,7 @@ public class PlayerController {
         PlayerFilterCriteria playerFilterCriteria = new PlayerFilterCriteria(name, title, race,
                 profession, after, before, banned, minExperience, maxExperience, minLevel, maxLevel);
 
-        return new ResponseEntity<>(playerService.countPlayerWithFilters(title), HttpStatus.OK);
+        return playerService.countPlayerWithFilters(playerFilterCriteria);
     }
 
     //~3h
